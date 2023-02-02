@@ -1,5 +1,11 @@
 import styled from "styled-components/native";
 
+// React Native FlatList
+import { FlatList } from "react-native";
+
+// DTO
+import { carDTO } from "../../dtos/CarDTO";
+
 // React Native Responsive Font Size
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -30,10 +36,9 @@ export const TotalCars = styled.Text`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-export const CarList = styled.FlatList.attrs({
-  // FlatList is a React Native component that renders a scrollable list of items. It is a more performant alternative to the ScrollView component.
+export const CarList = styled(FlatList).attrs({
   contentContainerStyle: {
     padding: 24,
   },
-  showsVerticalScrollIndicator: false,
-})``;
+  showVerticalScrollbar: false,
+})`` as React.ComponentType as new <carDTO>() => FlatList<carDTO>;
