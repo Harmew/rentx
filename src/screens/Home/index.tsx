@@ -3,11 +3,24 @@ import React, { useEffect, useState } from "react";
 // React Native
 import { StatusBar } from "react-native";
 
+// Icons
+import { Ionicons } from "@expo/vector-icons";
+
 // React Native Responsive Font Size
 import { RFValue } from "react-native-responsive-fontsize";
 
+// UseTheme
+import { useTheme } from "styled-components";
+
 // CSS
-import { Container, Header, HeaderContent, TotalCars, CarList } from "./styles";
+import {
+  Container,
+  Header,
+  HeaderContent,
+  TotalCars,
+  CarList,
+  MyCarsButton,
+} from "./styles";
 
 // SVG Logo
 import Logo from "../../assets/logo.svg";
@@ -33,12 +46,19 @@ export function Home() {
   const [cars, setCars] = useState<carDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // UseTheme
+  const theme = useTheme();
+
   // Use Navigation hook to navigate to CarDetails screen with handleCarDetails function
   const navigation = useNavigation<PropsStack>();
 
   // Function to navigate to CarDetails screen
   function handleCarDetails(car: carDTO) {
     navigation.navigate("CarDetails", { car });
+  }
+
+  function handleOpenMyCars() {
+    navigation.navigate("MyCars");
   }
 
   // Fetch cars from API
@@ -85,6 +105,10 @@ export function Home() {
           )}
         />
       )}
+
+      <MyCarsButton onPress={handleOpenMyCars}>
+        <Ionicons name="ios-car-sport" size={32} color={theme.colors.shape} />
+      </MyCarsButton>
     </Container>
   );
 }

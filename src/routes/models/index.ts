@@ -9,9 +9,15 @@ export type PropsNavigationStack = {
   CarDetails: {
     car: carDTO;
   };
-  Scheduling: undefined;
-  SchedulingDetails: undefined;
+  Scheduling: {
+    car: carDTO;
+  };
+  SchedulingDetails: {
+    car: carDTO;
+    dates: string[];
+  };
   SchedulingComplete: undefined;
+  MyCars: undefined;
 };
 
 // Define the type and properties for the Stack to be used to navigate between screens

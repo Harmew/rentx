@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// Date-fns
+import { format } from "date-fns";
+
 // Components
 import { BackButton } from "../../components/BackButton";
 import { Button } from "../../components/Button";
@@ -9,6 +12,9 @@ import {
   MarkedDateProps,
   generateInterval,
 } from "../../components/Calendar";
+
+// Utils
+import { getPlatformDate } from "../../utils/getPlatformDate";
 
 // UseTheme hook from styled-components
 import { useTheme } from "styled-components";
@@ -29,14 +35,17 @@ import {
 // SVGs
 import ArrowSvg from "../../assets/arrow.svg";
 
-// Status Bar
+// React Native
 import { StatusBar } from "react-native";
 
 // React Navigation hook
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 // PropsStack from Routes Models to useNavigation hook
 import { PropsStack } from "../../routes/models";
+
+// CarDTO
+import { carDTO } from "../../dtos/carDTO";
 
 // Interface
 interface RentalPeriod {
@@ -44,14 +53,24 @@ interface RentalPeriod {
   endFormatted: string;
 }
 
+interface Params {
+  car: carDTO;
+}
+
 export function Scheduling() {
   const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>(
     {} as DayProps
   );
-  const [markedDates, setMarkedDates] = useState<MarkedDateProps>({});
+  const [markedDates, setMarkedDates] = useState<MarkedDateProps>(
+    {} as MarkedDateProps
+  );
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
     {} as RentalPeriod
   );
+
+  // Routes
+  const route = useRoute();
+  const { car } = route.params as Params;
 
   // Use Navigation hook to navigate to SchedulingDetails screen with handleConfirmRental function
   const navigation = useNavigation<PropsStack>();
@@ -61,7 +80,10 @@ export function Scheduling() {
 
   // Function to navigate to SchedulingDetails screen
   function handleConfirmRental() {
-    navigation.navigate("SchedulingDetails");
+    navigation.navigate("SchedulingDetails", {
+      car,
+      dates: Object.keys(markedDates),
+    });
   }
 
   // Function to navigate to previous screen
@@ -81,6 +103,19 @@ export function Scheduling() {
 
     setLastSelectedDate(end);
     const interval = generateInterval(start, end);
+    setMarkedDates(interval);
+
+    // Get the first and last date of the interval
+    const firstDate = Object.keys(interval)[0];
+    const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
+
+    setRentalPeriod({
+      startFormatted: format(
+        getPlatformDate(new Date(firstDate)),
+        "dd/MM/yyyy"
+      ),
+      endFormatted: format(getPlatformDate(new Date(endDate)), "dd/MM/yyyy"),
+    });
   }
 
   return (
@@ -91,12 +126,7 @@ export function Scheduling() {
           backgroundColor="transparent"
           translucent
         />
-        <BackButton
-          onPress={() => {
-            handleBack();
-          }}
-          color={theme.colors.shape}
-        />
+        <BackButton onPress={handleBack} color={theme.colors.shape} />
 
         <Title>
           Escolha uma{"\n"}
@@ -107,14 +137,18 @@ export function Scheduling() {
         <RentalPeriod>
           <DateInfo>
             <DateTitle>DE</DateTitle>
-            <DateValue selected={false}>18/06/2021</DateValue>
+            <DateValue selected={!!rentalPeriod.startFormatted}>
+              {rentalPeriod.startFormatted}
+            </DateValue>
           </DateInfo>
 
           <ArrowSvg />
 
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
-            <DateValue selected={false}>19/06/2021</DateValue>
+            <DateValue selected={!!rentalPeriod.endFormatted}>
+              {rentalPeriod.endFormatted}
+            </DateValue>
           </DateInfo>
         </RentalPeriod>
       </Header>
@@ -124,7 +158,11 @@ export function Scheduling() {
       </Content>
 
       <Footer>
-        <Button title="Confirmar" onPress={handleConfirmRental} />
+        <Button
+          title="Confirmar"
+          onPress={handleConfirmRental}
+          enabled={!!rentalPeriod.startFormatted}
+        />
       </Footer>
     </Container>
   );

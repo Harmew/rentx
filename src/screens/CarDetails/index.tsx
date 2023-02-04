@@ -18,6 +18,9 @@ import {
   Footer,
 } from "./styles";
 
+// React Native
+import { StatusBar } from "react-native";
+
 // Components
 import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
@@ -48,7 +51,7 @@ export function CarDetails() {
 
   // Function to navigate to Scheduling screen
   function handleConfirmRental() {
-    navigation.navigate("Scheduling");
+    navigation.navigate("Scheduling", { car });
   }
 
   // Function to navigate to previous screen
@@ -59,11 +62,12 @@ export function CarDetails() {
   return (
     <Container>
       <Header>
-        <BackButton
-          onPress={() => {
-            handleBack();
-          }}
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
         />
+        <BackButton onPress={handleBack} />
       </Header>
 
       <CarImages>
