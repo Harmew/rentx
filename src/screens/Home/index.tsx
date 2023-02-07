@@ -80,11 +80,8 @@ export function Home() {
   return (
     <Container>
       <StatusBar
-        // Status Bar Light
         barStyle="light-content"
-        // Status Bar Transparent
         backgroundColor="transparent"
-        // Status Bar
         translucent
       />
       <Header>

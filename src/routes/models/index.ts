@@ -6,6 +6,7 @@ import { carDTO } from "../../dtos/carDTO";
 // Define the type and properties for the NavigationStack to be used to navigate between screens
 export type PropsNavigationStack = {
   Home: undefined;
+  SignIn: undefined;
   CarDetails: {
     car: carDTO;
   };

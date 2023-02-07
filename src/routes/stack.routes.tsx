@@ -11,6 +11,7 @@ const { Navigator, Screen } = createStackNavigator<PropsNavigationStack>();
 
 // Import Screens from screens file
 import { Home } from "../screens/Home";
+import { SignIn } from "../screens/SignIn";
 import { MyCars } from "../screens/MyCars";
 import { CarDetails } from "../screens/CarDetails";
 import { Scheduling } from "../screens/Scheduling";
@@ -24,7 +25,8 @@ export function StackRoutes() {
       // Hide Header
       screenOptions={{ headerShown: false }}
       // Initial Route
-      initialRouteName="Home">
+      initialRouteName="SignIn">
+      <Screen name="SignIn" component={SignIn} />
       <Screen name="Home" component={Home} />
       <Screen name="MyCars" component={MyCars} />
       <Screen name="CarDetails" component={CarDetails} />

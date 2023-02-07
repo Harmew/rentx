@@ -11,6 +11,10 @@ interface ButtonProps extends RectButtonProps {
   color?: string;
 }
 
+interface ButtonTextProps {
+  light: boolean;
+}
+
 // Allow the Button component to be styled using the styled-components library and the RectButton component from the React Native Gesture Handler library. with the ButtonProps interface.
 export const Container = styled(RectButton)<ButtonProps>`
   width: 100%;
@@ -20,11 +24,13 @@ export const Container = styled(RectButton)<ButtonProps>`
   justify-content: center;
 
   background-color: ${({ color }) => color};
+  margin-bottom: 8px;
 `;
 
 // Allow the Title component to be styled using the styled-components library.
-export const Title = styled.Text`
+export const Title = styled.Text<ButtonTextProps>`
   font-family: ${({ theme }) => theme.fonts.secondary_500};
   font-size: ${RFValue(15)}px;
-  color: ${({ theme }) => theme.colors.shape};
+  color: ${({ theme, light }) =>
+    light ? theme.colors.header : theme.colors.shape};
 `;
